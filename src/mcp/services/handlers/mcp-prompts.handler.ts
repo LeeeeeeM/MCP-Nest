@@ -8,7 +8,10 @@ import {
   McpError,
   PromptArgument,
 } from '@modelcontextprotocol/sdk/types.js';
-import { DiscoveredCapability, McpRegistryDiscoveryService } from '../mcp-registry-discovery.service';
+import {
+  DiscoveredCapability,
+  McpRegistryDiscoveryService,
+} from '../mcp-registry-discovery.service';
 import { McpHandlerBase } from './mcp-handler.base';
 import { HttpRequest } from '../../interfaces/http-adapter.interface';
 import type { McpOptions } from '../../interfaces/mcp-options.interface';
@@ -79,10 +82,11 @@ export class McpPromptsHandler extends McpHandlerBase {
           const context = this.createContext(mcpServer, request);
 
           if (promptInfo.providerClass === DYNAMIC_PROMPT_HANDLER_TOKEN) {
-            const handler = McpDynamicRegistryService.getPromptHandlerByModuleId(
-              this.mcpModuleId,
-              name,
-            );
+            const handler =
+              McpDynamicRegistryService.getPromptHandlerByModuleId(
+                this.mcpModuleId,
+                name,
+              );
 
             if (!handler) {
               throw new McpError(

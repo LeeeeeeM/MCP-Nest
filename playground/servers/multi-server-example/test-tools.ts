@@ -8,7 +8,11 @@ import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 
 const SERVER_URL = 'http://localhost:3000';
 
-async function testServer(serverName: string, sseEndpoint: string, messagesEndpoint: string) {
+async function testServer(
+  serverName: string,
+  sseEndpoint: string,
+  messagesEndpoint: string,
+) {
   console.log(`\n${'='.repeat(60)}`);
   console.log(`Testing ${serverName}`);
   console.log('='.repeat(60));
@@ -43,11 +47,17 @@ async function testServer(serverName: string, sseEndpoint: string, messagesEndpo
     const toolNames = tools.map((t) => t.name);
 
     if (serverName === 'Public Server') {
-      const expected = ['get-weather', 'list-cities', 'send-notification', 'get-notifications', 'mark-notification-read'];
+      const expected = [
+        'get-weather',
+        'list-cities',
+        'send-notification',
+        'get-notifications',
+        'mark-notification-read',
+      ];
       const unexpected = ['get-metrics', 'track-request'];
 
       console.log('\nVerification:');
-      expected.forEach(name => {
+      expected.forEach((name) => {
         if (toolNames.includes(name)) {
           console.log(`  ✓ ${name} is present (expected)`);
         } else {
@@ -55,7 +65,7 @@ async function testServer(serverName: string, sseEndpoint: string, messagesEndpo
         }
       });
 
-      unexpected.forEach(name => {
+      unexpected.forEach((name) => {
         if (!toolNames.includes(name)) {
           console.log(`  ✓ ${name} is absent (expected)`);
         } else {
@@ -63,11 +73,17 @@ async function testServer(serverName: string, sseEndpoint: string, messagesEndpo
         }
       });
     } else if (serverName === 'Admin Server') {
-      const expected = ['get-metrics', 'track-request', 'send-notification', 'get-notifications', 'mark-notification-read'];
+      const expected = [
+        'get-metrics',
+        'track-request',
+        'send-notification',
+        'get-notifications',
+        'mark-notification-read',
+      ];
       const unexpected = ['get-weather', 'list-cities'];
 
       console.log('\nVerification:');
-      expected.forEach(name => {
+      expected.forEach((name) => {
         if (toolNames.includes(name)) {
           console.log(`  ✓ ${name} is present (expected)`);
         } else {
@@ -75,7 +91,7 @@ async function testServer(serverName: string, sseEndpoint: string, messagesEndpo
         }
       });
 
-      unexpected.forEach(name => {
+      unexpected.forEach((name) => {
         if (!toolNames.includes(name)) {
           console.log(`  ✓ ${name} is absent (expected)`);
         } else {

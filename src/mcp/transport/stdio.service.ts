@@ -40,9 +40,7 @@ export class StdioService implements OnApplicationBootstrap {
       );
 
     if (toolsWithGuards.length > 0) {
-      const toolNames = toolsWithGuards
-        .map((t) => t.metadata.name)
-        .join(', ');
+      const toolNames = toolsWithGuards.map((t) => t.metadata.name).join(', ');
       this.logger.warn(
         `@ToolGuards() are not supported with STDIO transport. ` +
           `The following tools have guards configured and will be hidden: ${toolNames}. ` +

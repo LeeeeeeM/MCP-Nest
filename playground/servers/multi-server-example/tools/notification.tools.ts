@@ -19,8 +19,17 @@ export class NotificationTools {
       message: z.string().describe('The notification message'),
     }),
   })
-  async sendNotification({ userId, message }: { userId: string; message: string }) {
-    const notification = this.notificationService.sendNotification(userId, message);
+  async sendNotification({
+    userId,
+    message,
+  }: {
+    userId: string;
+    message: string;
+  }) {
+    const notification = this.notificationService.sendNotification(
+      userId,
+      message,
+    );
 
     return {
       content: [
@@ -43,15 +52,16 @@ export class NotificationTools {
     const notifications = this.notificationService.getNotifications(userId);
     const unreadCount = this.notificationService.getUnreadCount(userId);
 
-    const notificationsText = notifications.length > 0
-      ? `Notifications for ${userId} (${unreadCount} unread):\n` +
-        notifications
-          .map(
-            (n) =>
-              `- [${n.read ? '✓' : '●'}] ${n.message} (${n.timestamp.toISOString()})`,
-          )
-          .join('\n')
-      : `No notifications for user ${userId}`;
+    const notificationsText =
+      notifications.length > 0
+        ? `Notifications for ${userId} (${unreadCount} unread):\n` +
+          notifications
+            .map(
+              (n) =>
+                `- [${n.read ? '✓' : '●'}] ${n.message} (${n.timestamp.toISOString()})`,
+            )
+            .join('\n')
+        : `No notifications for user ${userId}`;
 
     return {
       content: [

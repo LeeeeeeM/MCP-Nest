@@ -193,7 +193,8 @@ class GuardedTools {
 
   @Tool({
     name: 'bad-guard-tool',
-    description: 'Tool with a guard that accesses an unavailable context method',
+    description:
+      'Tool with a guard that accesses an unavailable context method',
     parameters: z.object({}),
   })
   @ToolGuards([ResponseAccessGuard])
@@ -214,7 +215,10 @@ describe('E2E: Tool Guards via @ToolGuards()', () => {
       transportName: 'Streamable HTTP (stateful)',
       transport: McpTransportType.STREAMABLE_HTTP,
       createClient: (port: number, headers?: Record<string, string>) =>
-        createStreamableClient(port, headers ? { requestInit: { headers } } : {}),
+        createStreamableClient(
+          port,
+          headers ? { requestInit: { headers } } : {},
+        ),
     },
   ])('$transportName transport', ({ transport, createClient }) => {
     let app: INestApplication;
@@ -362,9 +366,9 @@ describe('E2E: Tool Guards via @ToolGuards()', () => {
           arguments: {},
         });
 
-        expect((result.content as { type: string; text: string }[])[0].text).toBe(
-          'Public tool executed',
-        );
+        expect(
+          (result.content as { type: string; text: string }[])[0].text,
+        ).toBe('Public tool executed');
 
         await client.close();
       });
@@ -392,9 +396,9 @@ describe('E2E: Tool Guards via @ToolGuards()', () => {
           arguments: {},
         });
 
-        expect((result.content as { type: string; text: string }[])[0].text).toBe(
-          'Authenticated tool executed',
-        );
+        expect(
+          (result.content as { type: string; text: string }[])[0].text,
+        ).toBe('Authenticated tool executed');
 
         await client.close();
       });
@@ -424,9 +428,9 @@ describe('E2E: Tool Guards via @ToolGuards()', () => {
           arguments: {},
         });
 
-        expect((result.content as { type: string; text: string }[])[0].text).toBe(
-          'Admin tool executed',
-        );
+        expect(
+          (result.content as { type: string; text: string }[])[0].text,
+        ).toBe('Admin tool executed');
 
         await client.close();
       });
@@ -456,9 +460,9 @@ describe('E2E: Tool Guards via @ToolGuards()', () => {
           arguments: {},
         });
 
-        expect((result.content as { type: string; text: string }[])[0].text).toBe(
-          'Multi-guard tool executed',
-        );
+        expect(
+          (result.content as { type: string; text: string }[])[0].text,
+        ).toBe('Multi-guard tool executed');
 
         await client.close();
       });
@@ -473,9 +477,9 @@ describe('E2E: Tool Guards via @ToolGuards()', () => {
           arguments: {},
         });
 
-        expect((result.content as { type: string; text: string }[])[0].text).toBe(
-          'Async guard tool executed',
-        );
+        expect(
+          (result.content as { type: string; text: string }[])[0].text,
+        ).toBe('Async guard tool executed');
 
         await client.close();
       });
@@ -490,9 +494,9 @@ describe('E2E: Tool Guards via @ToolGuards()', () => {
           arguments: { message: 'hello world' },
         });
 
-        expect((result.content as { type: string; text: string }[])[0].text).toBe(
-          'Echo: hello world',
-        );
+        expect(
+          (result.content as { type: string; text: string }[])[0].text,
+        ).toBe('Echo: hello world');
 
         await client.close();
       });

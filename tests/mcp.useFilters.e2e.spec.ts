@@ -1,4 +1,10 @@
-import { INestApplication, Injectable, Catch, ExceptionFilter, UseFilters } from '@nestjs/common';
+import {
+  INestApplication,
+  Injectable,
+  Catch,
+  ExceptionFilter,
+  UseFilters,
+} from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { z } from 'zod';
 import { Tool, Resource, Prompt } from '../src';
@@ -121,7 +127,9 @@ class TestPrompts {
     description: 'Prompt that succeeds',
   })
   async successPrompt() {
-    return { messages: [{ role: 'assistant', content: { type: 'text', text: 'OK' } }] };
+    return {
+      messages: [{ role: 'assistant', content: { type: 'text', text: 'OK' } }],
+    };
   }
 }
 
@@ -154,10 +162,15 @@ describe('E2E: MCP UseFilters', () => {
       it('should use method-level filter over class-level filter', async () => {
         const client = await createSseClient(port);
         try {
-          const result: any = await client.callTool({ name: 'method-filter-tool', arguments: {} });
+          const result: any = await client.callTool({
+            name: 'method-filter-tool',
+            arguments: {},
+          });
 
           expect(result.isError).toBe(true);
-          expect(result.content[0].text).toBe('[CustomError] ERR_001: Method error');
+          expect(result.content[0].text).toBe(
+            '[CustomError] ERR_001: Method error',
+          );
         } finally {
           await client.close();
         }
@@ -168,7 +181,10 @@ describe('E2E: MCP UseFilters', () => {
       it('should catch any error with catch-all filter', async () => {
         const client = await createSseClient(port);
         try {
-          const result: any = await client.callTool({ name: 'class-filter-tool', arguments: {} });
+          const result: any = await client.callTool({
+            name: 'class-filter-tool',
+            arguments: {},
+          });
 
           expect(result.isError).toBe(true);
           expect(result.content[0].text).toBe('[CatchAll] Generic error');
@@ -180,7 +196,10 @@ describe('E2E: MCP UseFilters', () => {
       it('should not affect successful calls', async () => {
         const client = await createSseClient(port);
         try {
-          const result: any = await client.callTool({ name: 'success-tool', arguments: {} });
+          const result: any = await client.callTool({
+            name: 'success-tool',
+            arguments: {},
+          });
 
           expect(result.isError).toBeUndefined();
           expect(result.content[0].text).toBe('OK');
@@ -201,7 +220,9 @@ describe('E2E: MCP UseFilters', () => {
             client.readResource({ uri: 'mcp://method-filter-resource' }),
           ).rejects.toMatchObject({
             code: -32603,
-            message: expect.stringContaining('[CustomError] ERR_001: Method error'),
+            message: expect.stringContaining(
+              '[CustomError] ERR_001: Method error',
+            ),
           });
         } finally {
           await client.close();
@@ -227,7 +248,9 @@ describe('E2E: MCP UseFilters', () => {
       it('should not affect successful calls', async () => {
         const client = await createSseClient(port);
         try {
-          const result = await client.readResource({ uri: 'mcp://success-resource' });
+          const result = await client.readResource({
+            uri: 'mcp://success-resource',
+          });
 
           expect((result.contents[0] as { text: string }).text).toBe('OK');
         } finally {
@@ -246,7 +269,9 @@ describe('E2E: MCP UseFilters', () => {
             client.getPrompt({ name: 'method-filter-prompt' }),
           ).rejects.toMatchObject({
             code: -32603,
-            message: expect.stringContaining('[CustomError] ERR_001: Method error'),
+            message: expect.stringContaining(
+              '[CustomError] ERR_001: Method error',
+            ),
           });
         } finally {
           await client.close();
@@ -274,7 +299,10 @@ describe('E2E: MCP UseFilters', () => {
         try {
           const result = await client.getPrompt({ name: 'success-prompt' });
 
-          expect(result.messages[0].content).toEqual({ type: 'text', text: 'OK' });
+          expect(result.messages[0].content).toEqual({
+            type: 'text',
+            text: 'OK',
+          });
         } finally {
           await client.close();
         }

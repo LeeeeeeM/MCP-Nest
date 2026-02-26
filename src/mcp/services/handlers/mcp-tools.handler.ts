@@ -15,7 +15,10 @@ import {
   Type,
 } from '@nestjs/common';
 import { ContextIdFactory, ModuleRef, Reflector } from '@nestjs/core';
-import { DiscoveredCapability, McpRegistryDiscoveryService } from '../mcp-registry-discovery.service';
+import {
+  DiscoveredCapability,
+  McpRegistryDiscoveryService,
+} from '../mcp-registry-discovery.service';
 import { ToolGuardExecutionContext, ToolMetadata } from '../../decorators';
 import { McpHandlerBase } from './mcp-handler.base';
 import { ZodType } from 'zod';

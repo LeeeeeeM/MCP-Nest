@@ -573,8 +573,11 @@ describe('E2E: Dynamic Tool Registration via McpDynamicRegistryService', () => {
 
       app = moduleFixture.createNestApplication();
       await app.listen(0);
-      serverPort = (app.getHttpServer().address() as import('net').AddressInfo).port;
-      capabilityBuilder = moduleFixture.get(McpDynamicRegistryService, { strict: false });
+      serverPort = (app.getHttpServer().address() as import('net').AddressInfo)
+        .port;
+      capabilityBuilder = moduleFixture.get(McpDynamicRegistryService, {
+        strict: false,
+      });
     });
 
     afterAll(async () => {
@@ -588,7 +591,9 @@ describe('E2E: Dynamic Tool Registration via McpDynamicRegistryService', () => {
         handler: async () => ({ content: [{ type: 'text', text: 'temp' }] }),
       });
 
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         let tools = await client.listTools();
         expect(tools.tools.find((t) => t.name === 'temp-tool')).toBeDefined();
@@ -603,7 +608,9 @@ describe('E2E: Dynamic Tool Registration via McpDynamicRegistryService', () => {
     });
 
     it('should return an error when calling a removed tool', async () => {
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         await expect(
           client.callTool({ name: 'temp-tool', arguments: {} }),
@@ -627,11 +634,17 @@ describe('E2E: Dynamic Tool Registration via McpDynamicRegistryService', () => {
 
       capabilityBuilder.removeTool('tool-to-remove');
 
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         const tools = await client.listTools();
-        expect(tools.tools.find((t) => t.name === 'tool-to-keep')).toBeDefined();
-        expect(tools.tools.find((t) => t.name === 'tool-to-remove')).toBeUndefined();
+        expect(
+          tools.tools.find((t) => t.name === 'tool-to-keep'),
+        ).toBeDefined();
+        expect(
+          tools.tools.find((t) => t.name === 'tool-to-remove'),
+        ).toBeUndefined();
       } finally {
         await client.close();
       }
@@ -644,10 +657,14 @@ describe('E2E: Dynamic Tool Registration via McpDynamicRegistryService', () => {
         handler: async () => ({ content: [{ type: 'text', text: 'hot' }] }),
       });
 
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         const tools = await client.listTools();
-        expect(tools.tools.find((t) => t.name === 'hot-registered-tool')).toBeDefined();
+        expect(
+          tools.tools.find((t) => t.name === 'hot-registered-tool'),
+        ).toBeDefined();
       } finally {
         await client.close();
       }
@@ -657,23 +674,34 @@ describe('E2E: Dynamic Tool Registration via McpDynamicRegistryService', () => {
       capabilityBuilder.registerTool({
         name: 'reregistered-tool',
         description: 'Original',
-        handler: async () => ({ content: [{ type: 'text', text: 'original' }] }),
+        handler: async () => ({
+          content: [{ type: 'text', text: 'original' }],
+        }),
       });
       capabilityBuilder.removeTool('reregistered-tool');
       capabilityBuilder.registerTool({
         name: 'reregistered-tool',
         description: 'Replacement',
-        handler: async () => ({ content: [{ type: 'text', text: 'replacement' }] }),
+        handler: async () => ({
+          content: [{ type: 'text', text: 'replacement' }],
+        }),
       });
 
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         const tools = await client.listTools();
-        const matches = tools.tools.filter((t) => t.name === 'reregistered-tool');
+        const matches = tools.tools.filter(
+          (t) => t.name === 'reregistered-tool',
+        );
         expect(matches).toHaveLength(1);
         expect(matches[0].description).toBe('Replacement');
 
-        const result: any = await client.callTool({ name: 'reregistered-tool', arguments: {} });
+        const result: any = await client.callTool({
+          name: 'reregistered-tool',
+          arguments: {},
+        });
         expect(result.content[0].text).toBe('replacement');
       } finally {
         await client.close();
@@ -692,14 +720,19 @@ describe('E2E: Dynamic Tool Registration via McpDynamicRegistryService', () => {
         handler: async () => ({ content: [{ type: 'text', text: 'second' }] }),
       });
 
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         const tools = await client.listTools();
         const matches = tools.tools.filter((t) => t.name === 'duplicate-tool');
         expect(matches).toHaveLength(1);
         expect(matches[0].description).toBe('Second version');
 
-        const result: any = await client.callTool({ name: 'duplicate-tool', arguments: {} });
+        const result: any = await client.callTool({
+          name: 'duplicate-tool',
+          arguments: {},
+        });
         expect(result.content[0].text).toBe('second');
       } finally {
         await client.close();

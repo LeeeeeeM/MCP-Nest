@@ -41,7 +41,11 @@ export class McpFeatureModule {}
 
 @Module({
   imports: [DiscoveryModule],
-  providers: [McpRegistryDiscoveryService, McpExecutorService, ToolAuthorizationService],
+  providers: [
+    McpRegistryDiscoveryService,
+    McpExecutorService,
+    ToolAuthorizationService,
+  ],
 })
 export class McpModule {
   /**

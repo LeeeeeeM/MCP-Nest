@@ -15,7 +15,9 @@ export class WeatherTools {
     name: 'get-weather',
     description: 'Get current weather for a city',
     parameters: z.object({
-      city: z.string().describe('Name of the city (e.g., "New York", "London")'),
+      city: z
+        .string()
+        .describe('Name of the city (e.g., "New York", "London")'),
     }),
   })
   async getWeather({ city }: { city: string }) {

@@ -63,7 +63,10 @@ export class McpRegistryDiscoveryService implements OnApplicationBootstrap {
     private readonly modulesContainer: ModulesContainer,
     @Optional() @Inject('MCP_OPTIONS') private readonly options?: McpOptions,
   ) {
-    this.logger = createMcpLogger(McpRegistryDiscoveryService.name, this.options);
+    this.logger = createMcpLogger(
+      McpRegistryDiscoveryService.name,
+      this.options,
+    );
   }
 
   onApplicationBootstrap() {

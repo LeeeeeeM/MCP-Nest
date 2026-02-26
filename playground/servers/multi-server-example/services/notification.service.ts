@@ -30,7 +30,9 @@ export class NotificationService {
   }
 
   markAsRead(notificationId: string) {
-    const notification = this.notifications.find((n) => n.id === notificationId);
+    const notification = this.notifications.find(
+      (n) => n.id === notificationId,
+    );
     if (notification) {
       notification.read = true;
       return true;

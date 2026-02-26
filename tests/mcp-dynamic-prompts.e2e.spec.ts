@@ -24,7 +24,10 @@ class DynamicPromptsService implements OnModuleInit {
       description: 'Summarize the provided text',
       parameters: z.object({
         text: z.string().describe('The text to summarize'),
-        style: z.enum(['brief', 'detailed']).optional().describe('Summary style'),
+        style: z
+          .enum(['brief', 'detailed'])
+          .optional()
+          .describe('Summary style'),
       }),
       handler: async (args) => {
         return {
@@ -100,7 +103,9 @@ class Server1DynamicPrompts implements OnModuleInit {
       description: 'Prompt for server 1',
       handler: async () => ({
         description: 'Prompt for server 1',
-        messages: [{ role: 'user', content: { type: 'text', text: 'server 1 prompt' } }],
+        messages: [
+          { role: 'user', content: { type: 'text', text: 'server 1 prompt' } },
+        ],
       }),
     });
   }
@@ -116,7 +121,9 @@ class Server2DynamicPrompts implements OnModuleInit {
       description: 'Prompt for server 2',
       handler: async () => ({
         description: 'Prompt for server 2',
-        messages: [{ role: 'user', content: { type: 'text', text: 'server 2 prompt' } }],
+        messages: [
+          { role: 'user', content: { type: 'text', text: 'server 2 prompt' } },
+        ],
       }),
     });
   }
@@ -201,7 +208,8 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
 
       app = moduleFixture.createNestApplication();
       await app.listen(0);
-      serverPort = (app.getHttpServer().address() as import('net').AddressInfo).port;
+      serverPort = (app.getHttpServer().address() as import('net').AddressInfo)
+        .port;
     });
 
     afterAll(async () => {
@@ -209,29 +217,41 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
     });
 
     it('should list dynamically registered prompts', async () => {
-      const client = await createStreamableClient(serverPort, { endpoint: '/basic/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/basic/mcp',
+      });
       try {
         const result = await client.listPrompts();
 
-        expect(result.prompts.find((p) => p.name === 'summarize')).toBeDefined();
-        expect(result.prompts.find((p) => p.name === 'translate')).toBeDefined();
+        expect(
+          result.prompts.find((p) => p.name === 'summarize'),
+        ).toBeDefined();
+        expect(
+          result.prompts.find((p) => p.name === 'translate'),
+        ).toBeDefined();
       } finally {
         await client.close();
       }
     });
 
     it('should include argument metadata for prompts with parameters', async () => {
-      const client = await createStreamableClient(serverPort, { endpoint: '/basic/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/basic/mcp',
+      });
       try {
         const result = await client.listPrompts();
         const summarize = result.prompts.find((p) => p.name === 'summarize');
 
         expect(summarize?.description).toBe('Summarize the provided text');
-        expect(summarize?.arguments?.find((a) => a.name === 'text')).toMatchObject({
+        expect(
+          summarize?.arguments?.find((a) => a.name === 'text'),
+        ).toMatchObject({
           name: 'text',
           required: true,
         });
-        expect(summarize?.arguments?.find((a) => a.name === 'style')).toMatchObject({
+        expect(
+          summarize?.arguments?.find((a) => a.name === 'style'),
+        ).toMatchObject({
           name: 'style',
           required: false,
         });
@@ -241,7 +261,9 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
     });
 
     it('should execute a dynamically registered prompt with arguments', async () => {
-      const client = await createStreamableClient(serverPort, { endpoint: '/basic/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/basic/mcp',
+      });
       try {
         const result: any = await client.getPrompt({
           name: 'summarize',
@@ -256,11 +278,18 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
     });
 
     it('should execute a dynamic prompt without parameters', async () => {
-      const client = await createStreamableClient(serverPort, { endpoint: '/basic/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/basic/mcp',
+      });
       try {
-        const result: any = await client.getPrompt({ name: 'translate', arguments: {} });
+        const result: any = await client.getPrompt({
+          name: 'translate',
+          arguments: {},
+        });
 
-        expect(result.messages[0].content.text).toBe('Please translate the text.');
+        expect(result.messages[0].content.text).toBe(
+          'Please translate the text.',
+        );
       } finally {
         await client.close();
       }
@@ -278,7 +307,8 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
 
       app = moduleFixture.createNestApplication();
       await app.listen(0);
-      serverPort = (app.getHttpServer().address() as import('net').AddressInfo).port;
+      serverPort = (app.getHttpServer().address() as import('net').AddressInfo)
+        .port;
     });
 
     afterAll(async () => {
@@ -286,13 +316,21 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
     });
 
     it('should list both decorator and dynamic prompts', async () => {
-      const client = await createStreamableClient(serverPort, { endpoint: '/mixed/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/mixed/mcp',
+      });
       try {
         const result = await client.listPrompts();
 
-        expect(result.prompts.find((p) => p.name === 'summarize')).toBeDefined();
-        expect(result.prompts.find((p) => p.name === 'translate')).toBeDefined();
-        expect(result.prompts.find((p) => p.name === 'static-prompt')).toBeDefined();
+        expect(
+          result.prompts.find((p) => p.name === 'summarize'),
+        ).toBeDefined();
+        expect(
+          result.prompts.find((p) => p.name === 'translate'),
+        ).toBeDefined();
+        expect(
+          result.prompts.find((p) => p.name === 'static-prompt'),
+        ).toBeDefined();
         expect(result.prompts.length).toBe(3);
       } finally {
         await client.close();
@@ -300,7 +338,9 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
     });
 
     it('should execute decorator-based prompt alongside dynamic prompts', async () => {
-      const client = await createStreamableClient(serverPort, { endpoint: '/mixed/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/mixed/mcp',
+      });
       try {
         const result: any = await client.getPrompt({
           name: 'static-prompt',
@@ -325,7 +365,8 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
 
       app = moduleFixture.createNestApplication();
       await app.listen(0);
-      serverPort = (app.getHttpServer().address() as import('net').AddressInfo).port;
+      serverPort = (app.getHttpServer().address() as import('net').AddressInfo)
+        .port;
     });
 
     afterAll(async () => {
@@ -333,37 +374,59 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
     });
 
     it('should register dynamic prompts to correct server (server 1)', async () => {
-      const client = await createStreamableClient(serverPort, { endpoint: '/multi1/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/multi1/mcp',
+      });
       try {
         const result = await client.listPrompts();
 
-        expect(result.prompts.find((p) => p.name === 'server1-prompt')).toBeDefined();
-        expect(result.prompts.find((p) => p.name === 'server2-prompt')).toBeUndefined();
+        expect(
+          result.prompts.find((p) => p.name === 'server1-prompt'),
+        ).toBeDefined();
+        expect(
+          result.prompts.find((p) => p.name === 'server2-prompt'),
+        ).toBeUndefined();
       } finally {
         await client.close();
       }
     });
 
     it('should register dynamic prompts to correct server (server 2)', async () => {
-      const client = await createStreamableClient(serverPort, { endpoint: '/multi2/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/multi2/mcp',
+      });
       try {
         const result = await client.listPrompts();
 
-        expect(result.prompts.find((p) => p.name === 'server2-prompt')).toBeDefined();
-        expect(result.prompts.find((p) => p.name === 'server1-prompt')).toBeUndefined();
+        expect(
+          result.prompts.find((p) => p.name === 'server2-prompt'),
+        ).toBeDefined();
+        expect(
+          result.prompts.find((p) => p.name === 'server1-prompt'),
+        ).toBeUndefined();
       } finally {
         await client.close();
       }
     });
 
     it('should execute prompts on their respective servers', async () => {
-      const client1 = await createStreamableClient(serverPort, { endpoint: '/multi1/mcp' });
-      const client2 = await createStreamableClient(serverPort, { endpoint: '/multi2/mcp' });
+      const client1 = await createStreamableClient(serverPort, {
+        endpoint: '/multi1/mcp',
+      });
+      const client2 = await createStreamableClient(serverPort, {
+        endpoint: '/multi2/mcp',
+      });
       try {
-        const result1: any = await client1.getPrompt({ name: 'server1-prompt', arguments: {} });
+        const result1: any = await client1.getPrompt({
+          name: 'server1-prompt',
+          arguments: {},
+        });
         expect(result1.messages[0].content.text).toBe('server 1 prompt');
 
-        const result2: any = await client2.getPrompt({ name: 'server2-prompt', arguments: {} });
+        const result2: any = await client2.getPrompt({
+          name: 'server2-prompt',
+          arguments: {},
+        });
         expect(result2.messages[0].content.text).toBe('server 2 prompt');
       } finally {
         await client1.close();
@@ -384,8 +447,11 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
 
       app = moduleFixture.createNestApplication();
       await app.listen(0);
-      serverPort = (app.getHttpServer().address() as import('net').AddressInfo).port;
-      capabilityBuilder = moduleFixture.get(McpDynamicRegistryService, { strict: false });
+      serverPort = (app.getHttpServer().address() as import('net').AddressInfo)
+        .port;
+      capabilityBuilder = moduleFixture.get(McpDynamicRegistryService, {
+        strict: false,
+      });
     });
 
     afterAll(async () => {
@@ -402,22 +468,30 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
         }),
       });
 
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         let result = await client.listPrompts();
-        expect(result.prompts.find((p) => p.name === 'temp-prompt')).toBeDefined();
+        expect(
+          result.prompts.find((p) => p.name === 'temp-prompt'),
+        ).toBeDefined();
 
         capabilityBuilder.removePrompt('temp-prompt');
 
         result = await client.listPrompts();
-        expect(result.prompts.find((p) => p.name === 'temp-prompt')).toBeUndefined();
+        expect(
+          result.prompts.find((p) => p.name === 'temp-prompt'),
+        ).toBeUndefined();
       } finally {
         await client.close();
       }
     });
 
     it('should return an error when getting a removed prompt', async () => {
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         await expect(
           client.getPrompt({ name: 'temp-prompt', arguments: {} }),
@@ -447,11 +521,17 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
 
       capabilityBuilder.removePrompt('prompt-to-remove');
 
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         const result = await client.listPrompts();
-        expect(result.prompts.find((p) => p.name === 'prompt-to-keep')).toBeDefined();
-        expect(result.prompts.find((p) => p.name === 'prompt-to-remove')).toBeUndefined();
+        expect(
+          result.prompts.find((p) => p.name === 'prompt-to-keep'),
+        ).toBeDefined();
+        expect(
+          result.prompts.find((p) => p.name === 'prompt-to-remove'),
+        ).toBeUndefined();
       } finally {
         await client.close();
       }
@@ -467,10 +547,14 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
         }),
       });
 
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         const result = await client.listPrompts();
-        expect(result.prompts.find((p) => p.name === 'hot-registered-prompt')).toBeDefined();
+        expect(
+          result.prompts.find((p) => p.name === 'hot-registered-prompt'),
+        ).toBeDefined();
       } finally {
         await client.close();
       }
@@ -482,7 +566,9 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
         description: 'Original',
         handler: async () => ({
           description: 'Original',
-          messages: [{ role: 'user', content: { type: 'text', text: 'original' } }],
+          messages: [
+            { role: 'user', content: { type: 'text', text: 'original' } },
+          ],
         }),
       });
       capabilityBuilder.removePrompt('reregistered-prompt');
@@ -491,18 +577,27 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
         description: 'Replacement',
         handler: async () => ({
           description: 'Replacement',
-          messages: [{ role: 'user', content: { type: 'text', text: 'replacement' } }],
+          messages: [
+            { role: 'user', content: { type: 'text', text: 'replacement' } },
+          ],
         }),
       });
 
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         const result = await client.listPrompts();
-        const matches = result.prompts.filter((p) => p.name === 'reregistered-prompt');
+        const matches = result.prompts.filter(
+          (p) => p.name === 'reregistered-prompt',
+        );
         expect(matches).toHaveLength(1);
         expect(matches[0].description).toBe('Replacement');
 
-        const got: any = await client.getPrompt({ name: 'reregistered-prompt', arguments: {} });
+        const got: any = await client.getPrompt({
+          name: 'reregistered-prompt',
+          arguments: {},
+        });
         expect(got.messages[0].content.text).toBe('replacement');
       } finally {
         await client.close();
@@ -515,7 +610,9 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
         description: 'First version',
         handler: async () => ({
           description: 'First version',
-          messages: [{ role: 'user', content: { type: 'text', text: 'first' } }],
+          messages: [
+            { role: 'user', content: { type: 'text', text: 'first' } },
+          ],
         }),
       });
       capabilityBuilder.registerPrompt({
@@ -523,18 +620,27 @@ describe('E2E: Dynamic Prompt Registration via McpDynamicRegistryService', () =>
         description: 'Second version',
         handler: async () => ({
           description: 'Second version',
-          messages: [{ role: 'user', content: { type: 'text', text: 'second' } }],
+          messages: [
+            { role: 'user', content: { type: 'text', text: 'second' } },
+          ],
         }),
       });
 
-      const client = await createStreamableClient(serverPort, { endpoint: '/dereg/mcp' });
+      const client = await createStreamableClient(serverPort, {
+        endpoint: '/dereg/mcp',
+      });
       try {
         const result = await client.listPrompts();
-        const matches = result.prompts.filter((p) => p.name === 'duplicate-prompt');
+        const matches = result.prompts.filter(
+          (p) => p.name === 'duplicate-prompt',
+        );
         expect(matches).toHaveLength(1);
         expect(matches[0].description).toBe('Second version');
 
-        const got: any = await client.getPrompt({ name: 'duplicate-prompt', arguments: {} });
+        const got: any = await client.getPrompt({
+          name: 'duplicate-prompt',
+          arguments: {},
+        });
         expect(got.messages[0].content.text).toBe('second');
       } finally {
         await client.close();

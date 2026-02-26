@@ -14,7 +14,9 @@ async function bootstrap() {
   console.log('📡 PUBLIC SERVER (public-server)');
   console.log('═══════════════════════════════════════════════════════════');
   console.log(`   SSE Endpoint:        http://localhost:${port}/public/sse`);
-  console.log(`   Messages Endpoint:   http://localhost:${port}/public/messages`);
+  console.log(
+    `   Messages Endpoint:   http://localhost:${port}/public/messages`,
+  );
   console.log(`   MCP Endpoint:        http://localhost:${port}/public/mcp`);
   console.log('');
   console.log('   Available Tools:');
@@ -22,13 +24,17 @@ async function bootstrap() {
   console.log('   • list-cities           - List all cities with weather data');
   console.log('   • send-notification     - Send a notification (SHARED)');
   console.log('   • get-notifications     - Get user notifications (SHARED)');
-  console.log('   • mark-notification-read - Mark notification as read (SHARED)');
+  console.log(
+    '   • mark-notification-read - Mark notification as read (SHARED)',
+  );
   console.log('');
   console.log('═══════════════════════════════════════════════════════════');
   console.log('🔐 ADMIN SERVER (admin-server)');
   console.log('═══════════════════════════════════════════════════════════');
   console.log(`   SSE Endpoint:        http://localhost:${port}/admin/sse`);
-  console.log(`   Messages Endpoint:   http://localhost:${port}/admin/messages`);
+  console.log(
+    `   Messages Endpoint:   http://localhost:${port}/admin/messages`,
+  );
   console.log(`   MCP Endpoint:        http://localhost:${port}/admin/mcp`);
   console.log('');
   console.log('   Available Tools:');
@@ -36,7 +42,9 @@ async function bootstrap() {
   console.log('   • track-request         - Track a request manually');
   console.log('   • send-notification     - Send a notification (SHARED)');
   console.log('   • get-notifications     - Get user notifications (SHARED)');
-  console.log('   • mark-notification-read - Mark notification as read (SHARED)');
+  console.log(
+    '   • mark-notification-read - Mark notification as read (SHARED)',
+  );
   console.log('');
   console.log('═══════════════════════════════════════════════════════════');
   console.log('');

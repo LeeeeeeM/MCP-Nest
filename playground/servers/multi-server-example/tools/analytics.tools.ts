@@ -13,7 +13,8 @@ export class AnalyticsTools {
 
   @Tool({
     name: 'get-metrics',
-    description: 'Get overall system metrics including request counts and user statistics',
+    description:
+      'Get overall system metrics including request counts and user statistics',
   })
   async getMetrics() {
     const metrics = this.analyticsService.getMetrics();
@@ -43,7 +44,13 @@ System Metrics:
       userId: z.string().optional().describe('Optional user ID'),
     }),
   })
-  async trackRequest({ endpoint, userId }: { endpoint: string; userId?: string }) {
+  async trackRequest({
+    endpoint,
+    userId,
+  }: {
+    endpoint: string;
+    userId?: string;
+  }) {
     this.analyticsService.trackRequest(endpoint, userId);
 
     return {

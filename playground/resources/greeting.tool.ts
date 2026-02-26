@@ -370,7 +370,6 @@ export class GreetingTool {
       openWorldHint: false,
     },
   })
-
   @ToolScopes(['admin', 'write', 'delete'])
   @ToolRoles(['super-admin'])
   async superAdminGreet(

@@ -14,7 +14,10 @@ import {
   HttpRequest,
 } from '../../interfaces';
 import { McpOptions } from '../../interfaces/mcp-options.interface';
-import { DiscoveredCapability, McpRegistryDiscoveryService } from '../mcp-registry-discovery.service';
+import {
+  DiscoveredCapability,
+  McpRegistryDiscoveryService,
+} from '../mcp-registry-discovery.service';
 import { createMcpLogger } from '../../utils/mcp-logger.factory';
 import {
   EXCEPTION_FILTERS_METADATA,
