@@ -50,6 +50,9 @@ npm install @nestjs/typeorm typeorm
 
 ## Quick Start
 
+> [!TIP]
+> You can easily learn about this package using the `chat` tab in [Context7](https://context7.com/rekog-labs/mcp-nest?tab=chat). Better yet, connect the [Context7 MCP server](https://github.com/upstash/context7#installation) to allow your AI agents to access the documentation and implement MCP-Nest for you.
+
 ```typescript
 // app.module.ts
 import { Module } from '@nestjs/common';
