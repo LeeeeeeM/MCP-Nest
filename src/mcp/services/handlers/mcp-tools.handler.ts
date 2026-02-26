@@ -29,7 +29,7 @@ import { toJsonSchemaCompat } from '@modelcontextprotocol/sdk/server/zod-json-sc
 import { normalizeObjectSchema } from '@modelcontextprotocol/sdk/server/zod-compat.js';
 import type { McpOptions } from '../../interfaces/mcp-options.interface';
 import {
-  McpDynamicRegistryService,
+  McpRegistryService,
   DYNAMIC_TOOL_HANDLER_TOKEN,
 } from '../mcp-dynamic-registry.service';
 
@@ -356,10 +356,10 @@ export class McpToolsHandler extends McpHandlerBase {
           const context = this.createContext(mcpServer, request);
           let result: any;
 
-          // Check if this is a dynamic tool (registered via McpDynamicRegistryService)
+          // Check if this is a dynamic tool (registered via McpRegistryService)
           if (toolInfo.providerClass === DYNAMIC_TOOL_HANDLER_TOKEN) {
             // Dynamic tool - get handler using static method with the correct moduleId
-            const handler = McpDynamicRegistryService.getHandlerByModuleId(
+            const handler = McpRegistryService.getHandlerByModuleId(
               this.mcpModuleId,
               request.params.name,
             );

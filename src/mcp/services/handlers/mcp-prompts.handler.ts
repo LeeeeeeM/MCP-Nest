@@ -17,7 +17,7 @@ import { HttpRequest } from '../../interfaces/http-adapter.interface';
 import type { McpOptions } from '../../interfaces/mcp-options.interface';
 import { PromptMetadata } from '../../decorators';
 import {
-  McpDynamicRegistryService,
+  McpRegistryService,
   DYNAMIC_PROMPT_HANDLER_TOKEN,
 } from '../mcp-dynamic-registry.service';
 
@@ -83,7 +83,7 @@ export class McpPromptsHandler extends McpHandlerBase {
 
           if (promptInfo.providerClass === DYNAMIC_PROMPT_HANDLER_TOKEN) {
             const handler =
-              McpDynamicRegistryService.getPromptHandlerByModuleId(
+              McpRegistryService.getPromptHandlerByModuleId(
                 this.mcpModuleId,
                 name,
               );
