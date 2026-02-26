@@ -34,6 +34,10 @@ With `@rekog/mcp-nest` you define tools, resources, and prompts in a way that's 
 **Are you interested to build ChatGPT widgets (with the OpenAI SDK) or MCP apps?**
 Find out how to do that with `@rekog/MCP-Nest` in this repository [MCP-Nest-Samples](https://github.com/rinormaloku/MCP-Nest-Samples)
 
+
+> [!TIP]
+> You can easily learn about this package using the `chat` tab in [Context7](https://context7.com/rekog-labs/mcp-nest?tab=chat). Better yet, connect the [Context7 MCP server](https://github.com/upstash/context7#installation) to allow your AI agents to access the documentation and implement MCP-Nest for you.
+
 ## Installation
 
 ```bash
@@ -49,9 +53,6 @@ npm install @nestjs/typeorm typeorm
 ```
 
 ## Quick Start
-
-> [!TIP]
-> You can easily learn about this package using the `chat` tab in [Context7](https://context7.com/rekog-labs/mcp-nest?tab=chat). Better yet, connect the [Context7 MCP server](https://github.com/upstash/context7#installation) to allow your AI agents to access the documentation and implement MCP-Nest for you.
 
 ```typescript
 // app.module.ts
