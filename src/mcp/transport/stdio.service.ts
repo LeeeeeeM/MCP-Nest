@@ -27,9 +27,11 @@ export class StdioService implements OnApplicationBootstrap {
   }
 
   async onApplicationBootstrap() {
-    if (this.options.transport !== McpTransportType.STDIO) {
-      return;
-    }
+    const transports = Array.isArray(this.options.transport)
+      ? this.options.transport
+      : [this.options.transport];
+    if (!transports.includes(McpTransportType.STDIO)) return;
+
     this.logger.log('Bootstrapping MCP STDIO...');
 
     // Warn about tools with @ToolGuards() - they require HTTP context

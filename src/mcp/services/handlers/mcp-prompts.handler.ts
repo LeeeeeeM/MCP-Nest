@@ -82,11 +82,10 @@ export class McpPromptsHandler extends McpHandlerBase {
           const context = this.createContext(mcpServer, request);
 
           if (promptInfo.providerClass === DYNAMIC_PROMPT_HANDLER_TOKEN) {
-            const handler =
-              McpRegistryService.getPromptHandlerByModuleId(
-                this.mcpModuleId,
-                name,
-              );
+            const handler = McpRegistryService.getPromptHandlerByModuleId(
+              this.mcpModuleId,
+              name,
+            );
 
             if (!handler) {
               throw new McpError(
