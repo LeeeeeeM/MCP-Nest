@@ -15,16 +15,20 @@ import {
   ReadResourceRequestSchema,
   ReadResourceResult,
 } from '@modelcontextprotocol/sdk/types.js';
-import { McpRegistryService } from '../mcp-registry.service';
+import { McpRegistryDiscoveryService } from '../mcp-registry-discovery.service';
 import { McpHandlerBase } from './mcp-handler.base';
 import type { Context, McpOptions } from '../../interfaces';
 import { HttpRequest } from '../../interfaces/http-adapter.interface';
+import {
+  McpDynamicRegistryService,
+  DYNAMIC_RESOURCE_HANDLER_TOKEN,
+} from '../mcp-dynamic-registry.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class McpResourcesHandler extends McpHandlerBase {
   constructor(
     moduleRef: ModuleRef,
-    registry: McpRegistryService,
+    registry: McpRegistryDiscoveryService,
     reflector: Reflector,
     @Inject('MCP_MODULE_ID') private readonly mcpModuleId: string,
     @Optional() @Inject('MCP_OPTIONS') options?: McpOptions,
@@ -132,6 +136,24 @@ export class McpResourcesHandler extends McpHandlerBase {
     requestParams: Record<string, unknown>,
     methodName: string,
   ) {
+    if (providerClass === DYNAMIC_RESOURCE_HANDLER_TOKEN) {
+      const handler = McpDynamicRegistryService.getResourceHandlerByModuleId(
+        this.mcpModuleId,
+        methodName,
+      );
+
+      if (!handler) {
+        throw new McpError(
+          ErrorCode.MethodNotFound,
+          `Handler not found for dynamic resource: ${uri}`,
+        );
+      }
+
+      const result = await handler(requestParams, context, httpRequest.raw);
+      this.logger.debug('ReadResourceRequestSchema result', result);
+      return result as ReadResourceResult;
+    }
+
     const contextId = ContextIdFactory.getByRequest(httpRequest);
     this.moduleRef.registerRequestByContextId(httpRequest, contextId);
 

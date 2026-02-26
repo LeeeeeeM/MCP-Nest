@@ -14,12 +14,12 @@ import type {
   McpAsyncOptions,
 } from './interfaces';
 import { McpExecutorService } from './services/mcp-executor.service';
-import { McpRegistryService } from './services/mcp-registry.service';
+import { McpRegistryDiscoveryService } from './services/mcp-registry-discovery.service';
 import { McpSseService } from './services/mcp-sse.service';
 import { McpStreamableHttpService } from './services/mcp-streamable-http.service';
 import { SsePingService } from './services/sse-ping.service';
 import { ToolAuthorizationService } from './services/tool-authorization.service';
-import { McpToolBuilder } from './services/mcp-tool-builder.service';
+import { McpDynamicRegistryService } from './services/mcp-dynamic-registry.service';
 import { createSseController } from './transport/sse.controller.factory';
 import { StdioService } from './transport/stdio.service';
 import { createStreamableHttpController } from './transport/streamable-http.controller.factory';
@@ -41,7 +41,7 @@ export class McpFeatureModule {}
 
 @Module({
   imports: [DiscoveryModule],
-  providers: [McpRegistryService, McpExecutorService, ToolAuthorizationService],
+  providers: [McpRegistryDiscoveryService, McpExecutorService, ToolAuthorizationService],
 })
 export class McpModule {
   /**
@@ -141,10 +141,10 @@ export class McpModule {
       controllers,
       providers,
       exports: [
-        McpRegistryService,
+        McpRegistryDiscoveryService,
         McpSseService,
         McpStreamableHttpService,
-        McpToolBuilder,
+        McpDynamicRegistryService,
       ],
     };
   }
@@ -169,13 +169,13 @@ export class McpModule {
         provide: 'MCP_MODULE_ID',
         useValue: moduleId,
       },
-      McpRegistryService,
+      McpRegistryDiscoveryService,
       McpExecutorService,
       ToolAuthorizationService,
       SsePingService,
       McpSseService,
       McpStreamableHttpService,
-      McpToolBuilder,
+      McpDynamicRegistryService,
       StdioService,
     ];
 
@@ -190,10 +190,10 @@ export class McpModule {
         ...(options.extraProviders ?? []),
       ],
       exports: [
-        McpRegistryService,
+        McpRegistryDiscoveryService,
         McpSseService,
         McpStreamableHttpService,
-        McpToolBuilder,
+        McpDynamicRegistryService,
       ],
     };
   }
@@ -330,13 +330,13 @@ export class McpModule {
         provide: 'MCP_MODULE_ID',
         useValue: moduleId,
       },
-      McpRegistryService,
+      McpRegistryDiscoveryService,
       McpExecutorService,
       ToolAuthorizationService,
       SsePingService,
       McpSseService,
       McpStreamableHttpService,
-      McpToolBuilder,
+      McpDynamicRegistryService,
       StdioService,
     ];
 

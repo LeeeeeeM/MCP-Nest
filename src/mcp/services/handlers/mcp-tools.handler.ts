@@ -15,7 +15,7 @@ import {
   Type,
 } from '@nestjs/common';
 import { ContextIdFactory, ModuleRef, Reflector } from '@nestjs/core';
-import { DiscoveredTool, McpRegistryService } from '../mcp-registry.service';
+import { DiscoveredCapability, McpRegistryDiscoveryService } from '../mcp-registry-discovery.service';
 import { ToolGuardExecutionContext, ToolMetadata } from '../../decorators';
 import { McpHandlerBase } from './mcp-handler.base';
 import { ZodType } from 'zod';
@@ -26,9 +26,9 @@ import { toJsonSchemaCompat } from '@modelcontextprotocol/sdk/server/zod-json-sc
 import { normalizeObjectSchema } from '@modelcontextprotocol/sdk/server/zod-compat.js';
 import type { McpOptions } from '../../interfaces/mcp-options.interface';
 import {
-  McpToolBuilder,
+  McpDynamicRegistryService,
   DYNAMIC_TOOL_HANDLER_TOKEN,
-} from '../mcp-tool-builder.service';
+} from '../mcp-dynamic-registry.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class McpToolsHandler extends McpHandlerBase {
@@ -36,7 +36,7 @@ export class McpToolsHandler extends McpHandlerBase {
 
   constructor(
     moduleRef: ModuleRef,
-    registry: McpRegistryService,
+    registry: McpRegistryDiscoveryService,
     reflector: Reflector,
     @Inject('MCP_MODULE_ID') private readonly mcpModuleId: string,
     @Inject('MCP_OPTIONS') private readonly options: McpOptions,
@@ -98,7 +98,7 @@ export class McpToolsHandler extends McpHandlerBase {
    */
   private createToolGuardExecutionContext(
     httpRequest: HttpRequest,
-    tool: DiscoveredTool<ToolMetadata>,
+    tool: DiscoveredCapability<ToolMetadata>,
   ): ToolGuardExecutionContext & ExecutionContext {
     const providerClass = tool.providerClass as Type;
     const methodHandler =
@@ -133,7 +133,7 @@ export class McpToolsHandler extends McpHandlerBase {
    * Returns true if the tool has no guards or all guards pass.
    */
   private async checkToolGuards(
-    tool: DiscoveredTool<ToolMetadata>,
+    tool: DiscoveredCapability<ToolMetadata>,
     httpRequest: HttpRequest,
   ): Promise<boolean> {
     const guards = tool.metadata.guards;
@@ -353,10 +353,10 @@ export class McpToolsHandler extends McpHandlerBase {
           const context = this.createContext(mcpServer, request);
           let result: any;
 
-          // Check if this is a dynamic tool (registered via McpToolBuilder)
+          // Check if this is a dynamic tool (registered via McpDynamicRegistryService)
           if (toolInfo.providerClass === DYNAMIC_TOOL_HANDLER_TOKEN) {
             // Dynamic tool - get handler using static method with the correct moduleId
-            const handler = McpToolBuilder.getHandlerByModuleId(
+            const handler = McpDynamicRegistryService.getHandlerByModuleId(
               this.mcpModuleId,
               request.params.name,
             );
